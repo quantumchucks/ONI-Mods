@@ -1,0 +1,15 @@
+{
+    "ID":"GasGiant",
+    "typeName":"Gas Giant",
+    "description":"A massive volume of <link=\"HYDROGEN\">Hydrogen</link> formed around a small solid center.",
+    "iconSize":96,
+    "spriteName":"gasGiant",
+    "elementTable":
+    {
+        "Methane":{"min":100.0,"max":200.0},
+        "Hydrogen":{"min":100.0,"max":200.0},
+    },
+    "recoverableEntities":null,
+    "artifactDropRate":"Perfect",
+    "distanceRange":{"min":100000.0,"max":110000.0}
+}

@@ -1,0 +1,16 @@
+{
+    "ID":"DustyMoon",
+    "typeName":"Dusty Dwarf Planet",
+    "description":"A loosely held together composite of minerals.",
+    "iconSize":64,
+    "spriteName":"asteroid",
+    "elementTable":
+    {
+        "Regolith":{"min":100.0,"max":200.0},
+        "MaficRock":{"min":100.0,"max":200.0},
+        "SedimentaryRock":{"min":100.0,"max":200.0}
+    },
+    "recoverableEntities":null,
+    "artifactDropRate":"Amazing",
+    "distanceRange":{"min":70000.0,"max":90000.0}
+}
