@@ -36,7 +36,7 @@ namespace PlanetaryCustomization
         public static IEnumerable<string> ReadPlanetFiles()
         {
             FileInfo pathfinder = new FileInfo(Assembly.GetExecutingAssembly().Location);
-            DirectoryInfo dirInfo = new DirectoryInfo(pathfinder.Directory.FullName + "\\Planets\\");
+            DirectoryInfo dirInfo = new DirectoryInfo(pathfinder.Directory.FullName);
             StreamReader fileReader;
             string fileContents;
             foreach (FileInfo file in dirInfo.GetFiles("*.json"))
