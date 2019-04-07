@@ -1,0 +1,21 @@
+{
+    "ID":"TerraPlanet",
+    "typeName":"Terrestrial Planet",
+    "description":"A planet with a walkable surface, though it does not possess the resources to sustain long-term life.",
+    "iconSize":96,
+    "spriteName":"terra",
+    "elementTable":
+    {
+        "Water":{"min":100.0,"max":200.0},
+        "Algae":{"min":100.0,"max":200.0},
+        "Oxygen":{"min":100.0,"max":200.0},
+        "Dirt":{"min":100.0,"max":200.0}
+    },
+    "recoverableEntities":
+    {
+        "PrickleFlowerSeed":4,
+        "PacuEgg":4
+    },
+    "artifactDropRate":"Amazing",
+    "distanceRange":{"min":90000.0,"max":100000.0}
+}

@@ -1,0 +1,19 @@
+{
+    "ID":"MetallicAsteroid",
+    "typeName":"Metallic Asteroid",
+    "description":"A shimmering conglomerate of various metals.",
+    "iconSize":32,
+    "spriteName":"nebula",
+    "elementTable":
+    {
+        "Iron":{"min":100.0,"max":200.0},
+        "Copper":{"min":100.0,"max":200.0},
+        "Obsidian":{"min":100.0,"max":200.0}
+    },
+    "recoverableEntities":
+    {
+        "HatchMetal":3
+    },
+    "artifactDropRate":"Mediocre",
+    "distanceRange":{"min":40000.0,"max":60000.0}
+}
