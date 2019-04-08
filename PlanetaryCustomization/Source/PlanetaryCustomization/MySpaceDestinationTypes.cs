@@ -14,21 +14,29 @@ namespace PlanetaryCustomization
         {
             //the base constructor has already added the vanilla planets as resources, so let's remove those to enable modification
             //I should make this more intricate later on
-            resources.Clear();
 
             destinationDictionary = new Dictionary<string, SpaceDestinationType>();
-            List<JConfig.PlanetDefinition> planetDefs=new List<JConfig.PlanetDefinition>();
+            foreach (var dest in resources)
+            {
+                destinationDictionary.Add(dest.Id, dest);
+            }
+            //flush out the old resources now that they have been added
+            resources.Clear();
+
+            var planetDefs=new Dictionary<string, JConfig.PlanetDefinition>();
 
             foreach (string planetDefString in JConfig.ReadPlanetFiles())
             {
                 JConfig.PlanetDefinition pDef = JsonConvert.DeserializeObject<JConfig.PlanetDefinition>(planetDefString);
 
+                bool isNew = (destinationDictionary[pDef.ID]==null);
+
                 //Debug.Log("pDef: " + pDef.ID + " table: ");
                 //foreach (var kvpair in pDef.elementTable)
                 //    Debug.Log("element: " + kvpair.Key + " min: "+kvpair.Value.min+" max: "+kvpair.Value.max);
 
-                planetDefs.Add(pDef);
-                ArtifactDropRate artifactDropRate;
+                planetDefs.Add(pDef.ID,pDef);
+                ArtifactDropRate artifactDropRate=null;
                 switch (pDef.artifactDropRate)
                 {
                     case "Bad":
@@ -49,16 +57,39 @@ namespace PlanetaryCustomization
                     case "Perfect":
                         artifactDropRate = Db.Get().ArtifactDropRates.Perfect;
                         break;
-                    default:
-                        Debug.Log(pDef.ID + ": \"artifactDropRate\"=\"" + pDef.artifactDropRate + "\" is not a valid value, setting it to Bad instead.");
-                        artifactDropRate = Db.Get().ArtifactDropRates.Bad;
+                    case null:
+                        if (isNew)
+                            artifactDropRate = Db.Get().ArtifactDropRates.Bad;
                         break;
                 }
+                SpaceDestinationType planet;
+                if (isNew)
+                {
+                    Debug.Log("new");
 
-                SpaceDestinationType planet = new SpaceDestinationType(pDef.ID, parent, pDef.typeName, pDef.description, pDef.iconSize, pDef.spriteName, JConfig.convertElementTable(pDef.elementTable), pDef.recoverableEntities, artifactDropRate);
+                    //If planet is new, create new definition
+                    planet = new SpaceDestinationType(pDef.ID, parent, pDef.typeName, pDef.description, pDef.iconSize, pDef.spriteName, JConfig.convertElementTable(pDef.elementTable), pDef.recoverableEntities, artifactDropRate);
+
+                    destinationDictionary.Add(pDef.ID, planet);
+                }
+                else
+                {
+                    planet = destinationDictionary[pDef.ID];
+                    if (pDef.description!=null)
+                        destinationDictionary[pDef.ID].description = pDef.description;
+                    if (pDef.iconSize != 0)
+                        destinationDictionary[pDef.ID].iconSize = pDef.iconSize;
+                    if (pDef.spriteName != null)
+                        destinationDictionary[pDef.ID].spriteName = pDef.spriteName;
+                    if (pDef.elementTable != null)
+                        destinationDictionary[pDef.ID].elementTable = JConfig.convertElementTable(pDef.elementTable);
+                    if (pDef.recoverableEntities != null)
+                        destinationDictionary[pDef.ID].recoverableEntities = pDef.recoverableEntities;
+                    if (artifactDropRate != null)
+                        destinationDictionary[pDef.ID].artifactDropTable = artifactDropRate;
+                }
 
                 base.Add(planet);
-                destinationDictionary.Add(pDef.ID, planet);
             }
             if (planetDefs.Count == 0)
                 Debug.Log("PlanetaryCustomization: Could not find any planet definitions!");
@@ -71,20 +102,18 @@ namespace PlanetaryCustomization
             {
                 var distPool = new List<string>();
 
-                //debug MathUtil.MinMax mm=new MathUtil.MinMax;
-
-                foreach (JConfig.PlanetDefinition pDef in planetDefs)
+                foreach (var pDef in planetDefs)
                 {
-                    if (pDef.distanceRange.min<dist && pDef.distanceRange.max>dist)
+                    if (pDef.Value.distanceRange.min<dist && pDef.Value.distanceRange.max>dist)
                     {
-                        distPool.Add(pDef.ID);
+                        distPool.Add(pDef.Value.ID);
                     }
                 }
 
                 destPools.Add(distPool);
             }
 
-
+            /*
             //This exists for compatibility reasons so mods that modify existing planets _maybe_ don't get screwed (please don't smack me Cairath :( )
             base.Satellite = destinationDictionary["Satellite"];
 
@@ -106,7 +135,7 @@ namespace PlanetaryCustomization
 
             base.GasGiant = destinationDictionary["GasGiant"];
 
-            base.IceGiant = destinationDictionary["IceGiant"];
+            base.IceGiant = destinationDictionary["IceGiant"];*/
         }
 
         public List<List<string>> GetDestinationPools()

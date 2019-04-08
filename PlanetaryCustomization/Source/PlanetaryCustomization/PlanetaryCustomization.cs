@@ -37,8 +37,7 @@ namespace PlanetaryCustomization
             public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 Debug.Log("PlanetaryCustomization: Transpiler active.");
-
-                //MethodInfo hatsOnlyOnMap = AccessTools.Property(typeof(Prefs), nameof(Prefs.HatsOnlyOnMap)).GetGetMethod();
+                
                 ConstructorInfo listCtor = AccessTools.Constructor(typeof(List<int>));
                 MethodInfo getDstList = AccessTools.Method(typeof(PlanetaryCustomization), nameof(PlanetaryCustomization.GetDestinationList));
                 foreach (CodeInstruction instruction in instructions)
