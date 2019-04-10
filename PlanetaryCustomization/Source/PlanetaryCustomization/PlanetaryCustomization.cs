@@ -13,6 +13,19 @@ namespace PlanetaryCustomization
     //Modify SpacecraftManager.GenerateRandomDestinations() to dynamically load ids
     public static class PlanetaryCustomization
     {
+        public static List<string> additionalPlanetFolders;
+
+        //add Planets-folders to search for <planet>.json
+        public static void addPlanets(string location)
+        {
+            if (additionalPlanetFolders==null)
+            {
+                additionalPlanetFolders = new List<string>();
+            }
+
+            additionalPlanetFolders.Add(location);
+        }
+
         public static List<List<string>> GetDestinationList()
         {
             SpaceDestinationTypes spaceDestinationTypes = Db.Get().SpaceDestinationTypes;

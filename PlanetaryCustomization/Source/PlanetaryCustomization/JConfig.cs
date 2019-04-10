@@ -19,6 +19,11 @@ namespace PlanetaryCustomization
             {
                 return new MathUtil.MinMax(min, max);
             }
+            public MinMax(float min, float max)
+            {
+                this.min = min;
+                this.max = max;
+            }
         }
         public class PlanetDefinition
         {
@@ -35,8 +40,10 @@ namespace PlanetaryCustomization
 
         public static IEnumerable<string> ReadPlanetFiles()
         {
+            List<DirectoryInfo> directories = new List<DirectoryInfo>();
             FileInfo pathfinder = new FileInfo(Assembly.GetExecutingAssembly().Location);
             DirectoryInfo dirInfo = new DirectoryInfo(pathfinder.Directory.FullName+"\\Planets\\");
+
             if (!dirInfo.Exists)
             {
                 firstSetup(dirInfo);
@@ -44,16 +51,28 @@ namespace PlanetaryCustomization
                 //lets try that again
                 dirInfo = new DirectoryInfo(pathfinder.Directory.FullName + "\\Planets\\");
             }
-            StreamReader fileReader;
-            string fileContents;
-            foreach (FileInfo file in dirInfo.GetFiles("*.json"))
+            directories.Add(dirInfo);
+
+            if (PlanetaryCustomization.additionalPlanetFolders!=null)
+            foreach (var path in PlanetaryCustomization.additionalPlanetFolders)
             {
-                fileReader = file.OpenText();
-                fileContents = fileReader.ReadToEnd();
-                fileReader.Close();
-                yield return fileContents;
+                directories.Add(new DirectoryInfo(path));
             }
 
+            StreamReader fileReader;
+            string fileContents;
+            foreach (var dir in directories)
+            {
+                if (dir != null)
+                    foreach (FileInfo file in dir.GetFiles("*.json"))
+                    {
+                        fileReader = file.OpenText();
+                        fileContents = fileReader.ReadToEnd();
+                        fileReader.Close();
+                        yield return fileContents;
+                    }
+                else yield return null;
+            }
         }
 
         //first time setup until the workshop uploader respects my json

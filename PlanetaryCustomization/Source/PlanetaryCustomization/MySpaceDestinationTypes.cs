@@ -12,9 +12,6 @@ namespace PlanetaryCustomization
 
         public MySpaceDestinationTypes(ResourceSet parent) : base(parent)
         {
-            //the base constructor has already added the vanilla planets as resources, so let's remove those to enable modification
-            //I should make this more intricate later on
-
             destinationDictionary = new Dictionary<string, SpaceDestinationType>();
             foreach (var dest in resources)
             {
@@ -29,7 +26,7 @@ namespace PlanetaryCustomization
             {
                 JConfig.PlanetDefinition pDef = JsonConvert.DeserializeObject<JConfig.PlanetDefinition>(planetDefString);
 
-                bool isNew = (destinationDictionary[pDef.ID]==null);
+                bool isNew = !destinationDictionary.ContainsKey(pDef.ID);
 
                 //Debug.Log("pDef: " + pDef.ID + " table: ");
                 //foreach (var kvpair in pDef.elementTable)
@@ -65,8 +62,6 @@ namespace PlanetaryCustomization
                 SpaceDestinationType planet;
                 if (isNew)
                 {
-                    Debug.Log("new");
-
                     //If planet is new, create new definition
                     planet = new SpaceDestinationType(pDef.ID, parent, pDef.typeName, pDef.description, pDef.iconSize, pDef.spriteName, JConfig.convertElementTable(pDef.elementTable), pDef.recoverableEntities, artifactDropRate);
 
