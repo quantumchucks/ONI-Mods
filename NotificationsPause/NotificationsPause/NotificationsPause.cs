@@ -59,7 +59,7 @@ namespace NotificationsPause
                 }
 
                 
-                if (settings != null && settings.PauseOnNotification != null && settings.PauseOnNotification.ContainsKey(__instance.titleText))
+                if ((!(SpeedControlScreen.Instance.IsPaused)) && settings != null && settings.PauseOnNotification != null && settings.PauseOnNotification.ContainsKey(__instance.titleText))
                 {
                     if (Time.time - lastPause > settings.cooldown)
                     {
@@ -67,7 +67,7 @@ namespace NotificationsPause
                         if (settings.PauseOnNotification[__instance.titleText])
                         {
                             SpeedControlScreen.Instance.Pause();
-                            lastPause = Time.realtimeSinceStartup;
+                            lastPause = Time.time;
                         }
                     }
                 }
@@ -75,12 +75,12 @@ namespace NotificationsPause
                     //... otherwise use default behaviour
                     if (__instance.Type == NotificationType.Bad || __instance.Type == NotificationType.DuplicantThreatening)
                     {
-                        if (!((__instance.titleText == "Combat!") || (__instance.titleText == "Missing Research Station")))
+                        if (!((__instance.titleText == "Combat!") || (__instance.titleText == "Missing Research Station") || (__instance.titleText == "No Researchers assigned") || (__instance.titleText == "Yellow Alert") || (__instance.titleText == "Red Alert")))
                         {
                             if (Time.time - lastPause > 1.0)
                             {
                                 SpeedControlScreen.Instance.Pause();
-                                lastPause = Time.realtimeSinceStartup;
+                                lastPause = Time.time;
                             }
                         }
                     }
